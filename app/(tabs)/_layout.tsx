@@ -1,35 +1,92 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { Icons } from '@/components/icons';
+import { Colors, FontFamily } from '@/constants/theme';
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+type TabName = 'index' | 'companion' | 'rituals' | 'progress';
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+const TAB_CONFIG: Record<TabName, { label: string; Icon: React.ComponentType<{ size: number; color: string }> }> = {
+  index:     { label: 'Today',   Icon: Icons.Home },
+  companion: { label: 'Listen',  Icon: Icons.Chat },
+  rituals:   { label: 'Rituals', Icon: Icons.Flame },
+  progress:  { label: 'Path',    Icon: Icons.Compass },
+};
+
+function HollowTabBar({ state, navigation }: BottomTabBarProps) {
+  const insets = useSafeAreaInsets();
+  const visibleRoutes = state.routes.filter(r => r.name in TAB_CONFIG);
 
   return (
+    <View style={styles.container} pointerEvents="box-none">
+      <LinearGradient
+        colors={[Colors.ink, 'transparent']}
+        start={{ x: 0, y: 1 }}
+        end={{ x: 0, y: 0 }}
+        style={StyleSheet.absoluteFillObject}
+        pointerEvents="none"
+      />
+      <View style={[styles.tabs, { paddingBottom: Math.max(insets.bottom, 12) + 8 }]}>
+        {visibleRoutes.map(route => {
+          const config = TAB_CONFIG[route.name as TabName];
+          const isFocused = state.routes[state.index].name === route.name;
+          const color = isFocused ? Colors.bone : Colors.boneFade;
+          return (
+            <TouchableOpacity
+              key={route.key}
+              onPress={() => navigation.navigate(route.name)}
+              style={styles.tab}
+              activeOpacity={0.7}
+            >
+              <config.Icon size={20} color={color} />
+              <Text style={[styles.label, { color }]}>{config.label}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  tabs: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingTop: 10,
+  },
+  tab: {
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+  },
+  label: {
+    fontFamily: FontFamily.mono,
+    fontSize: 9,
+    letterSpacing: 1.4,
+    textTransform: 'uppercase',
+  },
+});
+
+export default function TabLayout() {
+  return (
     <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
+      tabBar={props => <HollowTabBar {...props} />}
+      screenOptions={{ headerShown: false }}
+    >
+      <Tabs.Screen name="index" />
+      <Tabs.Screen name="companion" />
+      <Tabs.Screen name="rituals" />
+      <Tabs.Screen name="progress" />
+      <Tabs.Screen name="explore" options={{ href: null }} />
     </Tabs>
   );
 }
