@@ -1,53 +1,27 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
-import { Platform } from 'react-native';
-
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
-
 export const Colors = {
-  light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
-  },
-  dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
-  },
-};
+  ink: '#0E0E10',
+  ink2: '#16161A',
+  ink3: '#1E1E24',
+  ink4: '#2A2A32',
+  bone: '#E8E4D9',
+  boneDim: '#C9C4B8',
+  boneFade: 'rgba(232, 228, 217, 0.55)',
+  boneGhost: 'rgba(232, 228, 217, 0.25)',
+  rust: '#C86F5D',
+  rustDim: '#8F4E41',
+  lilac: '#A89BB8',
+  lilacDim: '#6B607A',
+  sage: '#8A9A82',
+  warn: '#D4A373',
+  crisis: '#D96E6E',
+} as const;
 
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
-  },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-  },
-});
+export const FontFamily = {
+  serifDisplay: 'InstrumentSerif_400Regular_Italic',
+  serifDisplayUpright: 'InstrumentSerif_400Regular',
+  serifBody: 'Literata_400Regular',
+  serifBodyItalic: 'Literata_400Regular_Italic',
+  mono: 'JetBrainsMono_400Regular',
+  monoLight: 'JetBrainsMono_300Light',
+  monoMedium: 'JetBrainsMono_500Medium',
+} as const;
